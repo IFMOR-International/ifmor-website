@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>IFMOR International | Research, Innovation, Skills & Impact</title>
+
+  <meta name="description" content="International Foundation for Management and Organisational Research (IFMOR) advances research, innovation, skills, education and organisational impact through technology-enabled platforms and programmes.">
+
+  <meta name="keywords" content="IFMOR, International Foundation for Management and Organisational Research, research, innovation, management, organisational research, skills, education, IJMOR">
+
+  <meta name="author" content="International Foundation for Management and Organisational Research">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: #1f2937;
+      background: #ffffff;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+      color: #166534;
+      text-decoration: none;
+    }
+
+    .brand span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #6b7280;
+      letter-spacing: 0.4px;
+    }
+
+    nav a {
+      margin-left: 22px;
+      text-decoration: none;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #166534;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #f0fdf4, #ffffff);
+      padding: 90px 24px;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      max-width: 850px;
+      font-size: 48px;
+      line-height: 1.15;
+      margin-bottom: 22px;
+      color: #14532d;
+    }
+
+    .hero p {
+      max-width: 760px;
+      font-size: 19px;
+      color: #4b5563;
+      margin-bottom: 30px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 22px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid #166534;
+    }
+
+    .button-primary {
+      background: #166534;
+      color: #ffffff;
+    }
+
+    .button-secondary {
+      color: #166534;
+      background: #ffffff;
+    }
+
+    section {
+      padding: 70px 24px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .section-title {
+      font-size: 32px;
+      color: #14532d;
+      margin-bottom: 15px;
+    }
+
+    .section-intro {
+      max-width: 760px;
+      color: #6b7280;
+      margin-bottom: 35px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 28px;
+      background: #ffffff;
+    }
+
+    .card h3 {
+      color: #166534;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .about {
+      background: #f9fafb;
+    }
+
+    .cta {
+      background: #14532d;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 34px;
+      margin-bottom: 15px;
+    }
+
+    .cta p {
+      max-width: 700px;
+      margin: 0 auto 25px;
+      color: #dcfce7;
+    }
+
+    footer {
+      background: #111827;
+      color: #d1d5db;
+      padding: 35px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    footer strong {
+      color: #ffffff;
+    }
+
+    footer p {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav a {
+        margin-left: 0;
+        margin-right: 15px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a href="index.html" class="brand">
+      IFMOR
+      <span>International Foundation for Management and Organisational Research</span>
+    </a>
+
+    <nav>
+      <a href="#about">About</a>
+      <a href="#areas">Our Areas</a>
+      <a href="#research">Research</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Research, Innovation, Skills and Organisational Impact</h1>
+
+      <p>
+        IFMOR International works to connect research, knowledge,
+        technology, skills and organisational practice to create
+        meaningful opportunities for learners, researchers,
+        institutions and organisations.
+      </p>
+
+      <div class="buttons">
+        <a href="#areas" class="button button-primary">Explore IFMOR</a>
+        <a href="#research" class="button button-secondary">Research & Publications</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="container">
+      <h2 class="section-title">About IFMOR</h2>
+
+      <p class="section-intro">
+        The International Foundation for Management and Organisational
+        Research (IFMOR) is an organisation focused on advancing
+        research, learning, innovation, capacity building and
+        organisational impact through interdisciplinary and
+        technology-enabled initiatives.
+      </p>
+
+      <p>
+        IFMOR aims to create an integrated ecosystem in which
+        knowledge can move from research and learning toward practical
+        innovation, professional development and social impact.
+      </p>
+    </div>
+  </section>
+
+  <section id="areas">
+    <div class="container">
+      <h2 class="section-title">Our Areas</h2>
+
+      <p class="section-intro">
+        IFMOR brings together complementary activities across
+        research, education, innovation and organisational impact.
+      </p>
+
+      <div class="cards">
+
+        <div class="card" id="research">
+          <h3>Research & Publications</h3>
+          <p>
+            Research dissemination, scholarly publishing,
+            interdisciplinary knowledge exchange and research
+            support through IFMOR initiatives including IJMOR.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Education & Skills</h3>
+          <p>
+            Learning, professional development, research skills,
+            technology-enabled training and competency-oriented
+            certification programmes.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Innovation & Impact</h3>
+          <p>
+            Innovation programmes, institutional collaboration,
+            organisational initiatives and impact-oriented
+            partnerships connecting knowledge with practice.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>Building a Knowledge-Driven Future</h2>
+
+      <p>
+        IFMOR seeks to connect people, knowledge, technology and
+        organisations to create pathways for research, learning,
+        innovation and impact.
+      </p>
+
+      <a href="#contact" class="button button-secondary">Connect with IFMOR</a>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="footer-inner">
+    <strong>IFMOR International</strong>
+
+    <p>
+      International Foundation for Management and Organisational Research
+    </p>
+
+    <p>
+      Email: admin@ifmor.org
+    </p>
+
+    <p>
+      © 2026 IFMOR International. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
