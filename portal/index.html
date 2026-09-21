@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>IFMOR Portal</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -20,7 +21,7 @@
     }
 
     .container {
-      width: min(100% - 32px, 1050px);
+      width: min(100% - 32px, 1100px);
       margin: auto;
     }
 
@@ -46,15 +47,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 30px 0;
     }
 
     .card {
       width: 100%;
       max-width: 430px;
-      background: white;
+      background: #ffffff;
       border-radius: 14px;
       padding: 34px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.08);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
 
     h1 {
@@ -79,6 +81,11 @@
       border: 1px solid #d0d5dd;
       border-radius: 8px;
       font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #173b70;
     }
 
     button {
@@ -88,10 +95,19 @@
       border: 0;
       border-radius: 8px;
       background: #173b70;
-      color: white;
+      color: #ffffff;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.94;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .message {
@@ -100,6 +116,7 @@
       border-radius: 8px;
       display: none;
       font-size: 14px;
+      line-height: 1.5;
     }
 
     .error {
@@ -120,16 +137,51 @@
     }
 
     .dashboard-card {
-      background: white;
+      background: #ffffff;
       padding: 30px;
       border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    }
+
+    .welcome {
+      color: #475467;
+      line-height: 1.6;
+    }
+
+    .profile-info {
+      margin-top: 20px;
+      padding: 18px;
+      border: 1px solid #e4e7ec;
+      border-radius: 10px;
+      background: #fafbfc;
+    }
+
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eaecf0;
+    }
+
+    .profile-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-label {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .profile-value {
+      font-weight: 600;
+      text-align: right;
     }
 
     .role {
       display: inline-block;
-      margin-top: 8px;
-      padding: 6px 10px;
+      margin-top: 12px;
+      padding: 7px 12px;
       border-radius: 20px;
       background: #eef4ff;
       color: #173b70;
@@ -137,26 +189,69 @@
       font-weight: 700;
     }
 
-    .logout {
-      max-width: 160px;
-      background: #475467;
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #ecfdf3;
+      color: #027a48;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .service-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 15px;
-      margin-top: 25px;
+      margin-top: 28px;
     }
 
     .service {
       border: 1px solid #e4e7ec;
       border-radius: 10px;
       padding: 20px;
+      background: #ffffff;
     }
 
     .service h3 {
       margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .service p {
+      color: #667085;
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+
+    .logout {
+      max-width: 160px;
+      background: #475467;
+      margin-top: 28px;
+    }
+
+    .footer {
+      margin-top: 35px;
+      padding-top: 20px;
+      border-top: 1px solid #eaecf0;
+      color: #667085;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .card,
+      .dashboard-card {
+        padding: 24px;
+      }
+
+      .profile-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .profile-value {
+        text-align: left;
+      }
     }
   </style>
 </head>
@@ -166,13 +261,18 @@
 <header>
   <div class="container">
     <div class="brand">IFMOR International</div>
+
     <div class="subtitle">
       International Foundation for Management and Organisational Research
     </div>
   </div>
 </header>
 
+
+<!-- LOGIN -->
+
 <section id="loginSection" class="login-wrapper">
+
   <div class="card">
 
     <h1>IFMOR Portal</h1>
@@ -203,14 +303,20 @@
         placeholder="Enter your password"
       >
 
-      <button type="submit">Sign In</button>
+      <button id="loginButton" type="submit">
+        Sign In
+      </button>
 
     </form>
 
     <div id="message" class="message"></div>
 
   </div>
+
 </section>
+
+
+<!-- DASHBOARD -->
 
 <section id="dashboard">
 
@@ -220,45 +326,131 @@
 
       <h1>IFMOR Dashboard</h1>
 
-      <p id="welcome"></p>
+      <p id="welcome" class="welcome"></p>
 
       <div id="role" class="role"></div>
 
-      <div class="service-grid">
 
-        <div class="service">
-          <h3>Research & Publications</h3>
-          <p>
-            Researcher, Author, Reviewer and Editorial services.
-          </p>
+      <!-- PROFILE -->
+
+      <div class="profile-info">
+
+        <div class="profile-row">
+
+          <span class="profile-label">
+            IFMOR ID
+          </span>
+
+          <span id="ifmorId" class="profile-value">
+            -
+          </span>
+
         </div>
 
-        <div class="service">
-          <h3>Education & Training</h3>
-          <p>
-            Courses, assessments, certifications and diplomas.
-          </p>
+
+        <div class="profile-row">
+
+          <span class="profile-label">
+            Account Status
+          </span>
+
+          <span id="accountStatus" class="profile-value">
+            -
+          </span>
+
         </div>
 
-        <div class="service">
-          <h3>Corporate & CSR</h3>
-          <p>
-            Organisational partnerships, CSR projects and impact.
-          </p>
-        </div>
 
-        <div id="adminService" class="service" style="display:none;">
-          <h3>IFMOR Administration</h3>
-          <p>
-            Administrative management and platform controls.
-          </p>
+        <div class="profile-row">
+
+          <span class="profile-label">
+            Email
+          </span>
+
+          <span id="userEmail" class="profile-value">
+            -
+          </span>
+
         </div>
 
       </div>
 
-      <button id="logoutButton" class="logout">
+
+      <!-- SERVICES -->
+
+      <div class="service-grid">
+
+        <div class="service">
+
+          <h3>
+            Research & Publications
+          </h3>
+
+          <p>
+            Researcher, Author, Reviewer and Editorial services.
+          </p>
+
+        </div>
+
+
+        <div class="service">
+
+          <h3>
+            Education & Training
+          </h3>
+
+          <p>
+            Courses, assessments, certifications and diplomas.
+          </p>
+
+        </div>
+
+
+        <div class="service">
+
+          <h3>
+            Corporate & CSR
+          </h3>
+
+          <p>
+            Organisational partnerships, CSR projects and impact.
+          </p>
+
+        </div>
+
+
+        <div
+          id="adminService"
+          class="service"
+          style="display:none;"
+        >
+
+          <h3>
+            IFMOR Administration
+          </h3>
+
+          <p>
+            Administrative management and platform controls.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="logoutButton"
+        class="logout"
+      >
         Sign Out
       </button>
+
+
+      <div class="footer">
+
+        IFMOR International Digital Platform
+
+      </div>
 
     </div>
 
@@ -266,21 +458,35 @@
 
 </section>
 
+
 <script>
 
   /*
-   * TEMPORARY CONFIGURATION
+   * ==========================================
+   * IFMOR SUPABASE CONFIGURATION
+   * ==========================================
    *
-   * We will insert the Supabase Project URL
-   * and Publishable Key in the next step.
+   * TEMPORARILY KEEP THESE TWO PLACEHOLDERS.
+   *
+   * We will insert:
+   * 1. Supabase Project URL
+   * 2. Supabase Publishable Key
+   *
+   * NEVER put the Supabase Secret Key here.
    */
 
+
   const SUPABASE_URL =
-    "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
+    "https://milaogptofvwaqxxnqys.supabase.co";
+
 
   const SUPABASE_PUBLISHABLE_KEY =
-    "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+    "sb_publishable_Yw9tyTfp7BbE0bklwbpcFQ_oAtJaxCo";
 
+
+  /*
+   * Create Supabase client
+   */
 
   const supabaseClient =
     window.supabase.createClient(
@@ -288,6 +494,10 @@
       SUPABASE_PUBLISHABLE_KEY
     );
 
+
+  /*
+   * Page elements
+   */
 
   const loginSection =
     document.getElementById("loginSection");
@@ -298,6 +508,9 @@
   const loginForm =
     document.getElementById("loginForm");
 
+  const loginButton =
+    document.getElementById("loginButton");
+
   const message =
     document.getElementById("message");
 
@@ -307,12 +520,25 @@
   const roleElement =
     document.getElementById("role");
 
+  const ifmorId =
+    document.getElementById("ifmorId");
+
+  const accountStatus =
+    document.getElementById("accountStatus");
+
+  const userEmail =
+    document.getElementById("userEmail");
+
   const adminService =
     document.getElementById("adminService");
 
   const logoutButton =
     document.getElementById("logoutButton");
 
+
+  /*
+   * Display message
+   */
 
   function showMessage(text, type) {
 
@@ -324,7 +550,15 @@
   }
 
 
+  /*
+   * Load IFMOR user profile
+   */
+
   async function loadDashboard(user) {
+
+    /*
+     * Get profile
+     */
 
     const {
       data: profile,
@@ -341,7 +575,10 @@
 
     if (profileError) {
 
-      console.error(profileError);
+      console.error(
+        "Profile error:",
+        profileError
+      );
 
       showMessage(
         "Unable to load your IFMOR profile.",
@@ -349,8 +586,13 @@
       );
 
       return;
+
     }
 
+
+    /*
+     * Get user's role
+     */
 
     const {
       data: userRole,
@@ -363,12 +605,15 @@
         )
         .eq("user_id", user.id)
         .limit(1)
-        .single();
+        .maybeSingle();
 
 
     if (roleError) {
 
-      console.error(roleError);
+      console.error(
+        "Role error:",
+        roleError
+      );
 
       showMessage(
         "Unable to load your IFMOR role.",
@@ -376,13 +621,13 @@
       );
 
       return;
+
     }
 
 
-    loginSection.style.display = "none";
-
-    dashboard.style.display = "block";
-
+    /*
+     * Determine display name
+     */
 
     const name =
       profile.display_name ||
@@ -395,30 +640,85 @@
       user.email;
 
 
+    /*
+     * Show dashboard
+     */
+
+    loginSection.style.display =
+      "none";
+
+    dashboard.style.display =
+      "block";
+
+
+    /*
+     * Welcome message
+     */
+
     welcome.textContent =
       "Welcome, " +
       name +
-      " (" +
-      profile.ifmor_id +
-      ")";
+      ".";
 
 
-    roleElement.textContent =
-      userRole.roles.role_name;
+    /*
+     * Profile information
+     */
+
+    ifmorId.textContent =
+      profile.ifmor_id;
 
 
-    if (
-      userRole.roles.role_code ===
-      "IFMOR_ADMIN"
-    ) {
+    userEmail.textContent =
+      user.email;
 
-      adminService.style.display =
-        "block";
+
+    /*
+     * Account status
+     */
+
+    accountStatus.textContent =
+      profile.account_status || "active";
+
+
+    /*
+     * Role
+     */
+
+    if (userRole && userRole.roles) {
+
+      roleElement.textContent =
+        userRole.roles.role_name;
+
+
+      /*
+       * Show administration service
+       * only for IFMOR Administrator
+       */
+
+      if (
+        userRole.roles.role_code ===
+        "IFMOR_ADMIN"
+      ) {
+
+        adminService.style.display =
+          "block";
+
+      }
+
+    } else {
+
+      roleElement.textContent =
+        "IFMOR Member";
 
     }
 
   }
 
+
+  /*
+   * Check existing login session
+   */
 
   async function checkSession() {
 
@@ -431,9 +731,13 @@
 
     if (error) {
 
-      console.error(error);
+      console.error(
+        "Session error:",
+        error
+      );
 
       return;
+
     }
 
 
@@ -447,6 +751,10 @@
 
   }
 
+
+  /*
+   * Login
+   */
 
   loginForm.addEventListener(
     "submit",
@@ -468,6 +776,13 @@
           .value;
 
 
+      loginButton.disabled =
+        true;
+
+      loginButton.textContent =
+        "Signing In...";
+
+
       showMessage(
         "Signing in...",
         "success"
@@ -487,14 +802,24 @@
 
       if (error) {
 
-        console.error(error);
+        console.error(
+          "Login error:",
+          error
+        );
 
         showMessage(
           error.message,
           "error"
         );
 
+        loginButton.disabled =
+          false;
+
+        loginButton.textContent =
+          "Sign In";
+
         return;
+
       }
 
 
@@ -506,9 +831,20 @@
 
       }
 
+
+      loginButton.disabled =
+        false;
+
+      loginButton.textContent =
+        "Sign In";
+
     }
   );
 
+
+  /*
+   * Logout
+   */
 
   logoutButton.addEventListener(
     "click",
@@ -529,9 +865,16 @@
 
       message.textContent = "";
 
+      adminService.style.display =
+        "none";
+
     }
   );
 
+
+  /*
+   * Monitor authentication state
+   */
 
   supabaseClient.auth.onAuthStateChange(
     async function(event, session) {
@@ -548,7 +891,9 @@
       }
 
 
-      if (event === "SIGNED_OUT") {
+      if (
+        event === "SIGNED_OUT"
+      ) {
 
         dashboard.style.display =
           "none";
@@ -556,11 +901,18 @@
         loginSection.style.display =
           "flex";
 
+        adminService.style.display =
+          "none";
+
       }
 
     }
   );
 
+
+  /*
+   * Start application
+   */
 
   checkSession();
 
