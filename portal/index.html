@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IFMOR Portal</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+    }
+
+    .container {
+      width: min(100% - 32px, 1050px);
+      margin: auto;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e9f0;
+      padding: 18px 0;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #667085;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .login-wrapper {
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 14px;
+      padding: 34px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.08);
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: #667085;
+      margin-bottom: 28px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 16px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d0d5dd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #173b70;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .error {
+      display: block;
+      background: #fff1f1;
+      color: #b42318;
+    }
+
+    .success {
+      display: block;
+      background: #ecfdf3;
+      color: #027a48;
+    }
+
+    #dashboard {
+      display: none;
+      padding: 45px 0;
+    }
+
+    .dashboard-card {
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+    }
+
+    .role {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #eef4ff;
+      color: #173b70;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .logout {
+      max-width: 160px;
+      background: #475467;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .service {
+      border: 1px solid #e4e7ec;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .service h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <div class="brand">IFMOR International</div>
+    <div class="subtitle">
+      International Foundation for Management and Organisational Research
+    </div>
+  </div>
+</header>
+
+<section id="loginSection" class="login-wrapper">
+  <div class="card">
+
+    <h1>IFMOR Portal</h1>
+
+    <p class="muted">
+      Sign in to access your IFMOR account.
+    </p>
+
+    <form id="loginForm">
+
+      <label for="email">Email</label>
+
+      <input
+        id="email"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="Enter your email"
+      >
+
+      <label for="password">Password</label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+        placeholder="Enter your password"
+      >
+
+      <button type="submit">Sign In</button>
+
+    </form>
+
+    <div id="message" class="message"></div>
+
+  </div>
+</section>
+
+<section id="dashboard">
+
+  <div class="container">
+
+    <div class="dashboard-card">
+
+      <h1>IFMOR Dashboard</h1>
+
+      <p id="welcome"></p>
+
+      <div id="role" class="role"></div>
+
+      <div class="service-grid">
+
+        <div class="service">
+          <h3>Research & Publications</h3>
+          <p>
+            Researcher, Author, Reviewer and Editorial services.
+          </p>
+        </div>
+
+        <div class="service">
+          <h3>Education & Training</h3>
+          <p>
+            Courses, assessments, certifications and diplomas.
+          </p>
+        </div>
+
+        <div class="service">
+          <h3>Corporate & CSR</h3>
+          <p>
+            Organisational partnerships, CSR projects and impact.
+          </p>
+        </div>
+
+        <div id="adminService" class="service" style="display:none;">
+          <h3>IFMOR Administration</h3>
+          <p>
+            Administrative management and platform controls.
+          </p>
+        </div>
+
+      </div>
+
+      <button id="logoutButton" class="logout">
+        Sign Out
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+
+  /*
+   * TEMPORARY CONFIGURATION
+   *
+   * We will insert the Supabase Project URL
+   * and Publishable Key in the next step.
+   */
+
+  const SUPABASE_URL =
+    "PASTE_YOUR_SUPABASE_PROJECT_URL_HERE";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE";
+
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+  const loginSection =
+    document.getElementById("loginSection");
+
+  const dashboard =
+    document.getElementById("dashboard");
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const message =
+    document.getElementById("message");
+
+  const welcome =
+    document.getElementById("welcome");
+
+  const roleElement =
+    document.getElementById("role");
+
+  const adminService =
+    document.getElementById("adminService");
+
+  const logoutButton =
+    document.getElementById("logoutButton");
+
+
+  function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+      "message " + type;
+
+  }
+
+
+  async function loadDashboard(user) {
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select(
+          "ifmor_id, display_name, first_name, last_name, account_status"
+        )
+        .eq("id", user.id)
+        .single();
+
+
+    if (profileError) {
+
+      console.error(profileError);
+
+      showMessage(
+        "Unable to load your IFMOR profile.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const {
+      data: userRole,
+      error: roleError
+    } =
+      await supabaseClient
+        .from("user_roles")
+        .select(
+          "role_id, roles(role_code, role_name)"
+        )
+        .eq("user_id", user.id)
+        .limit(1)
+        .single();
+
+
+    if (roleError) {
+
+      console.error(roleError);
+
+      showMessage(
+        "Unable to load your IFMOR role.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    loginSection.style.display = "none";
+
+    dashboard.style.display = "block";
+
+
+    const name =
+      profile.display_name ||
+      [
+        profile.first_name,
+        profile.last_name
+      ]
+        .filter(Boolean)
+        .join(" ") ||
+      user.email;
+
+
+    welcome.textContent =
+      "Welcome, " +
+      name +
+      " (" +
+      profile.ifmor_id +
+      ")";
+
+
+    roleElement.textContent =
+      userRole.roles.role_name;
+
+
+    if (
+      userRole.roles.role_code ===
+      "IFMOR_ADMIN"
+    ) {
+
+      adminService.style.display =
+        "block";
+
+    }
+
+  }
+
+
+  async function checkSession() {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+      console.error(error);
+
+      return;
+    }
+
+
+    if (data.session) {
+
+      await loadDashboard(
+        data.session.user
+      );
+
+    }
+
+  }
+
+
+  loginForm.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+
+      const email =
+        document
+          .getElementById("email")
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById("password")
+          .value;
+
+
+      showMessage(
+        "Signing in...",
+        "success"
+      );
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth
+          .signInWithPassword({
+            email,
+            password
+          });
+
+
+      if (error) {
+
+        console.error(error);
+
+        showMessage(
+          error.message,
+          "error"
+        );
+
+        return;
+      }
+
+
+      if (data.user) {
+
+        await loadDashboard(
+          data.user
+        );
+
+      }
+
+    }
+  );
+
+
+  logoutButton.addEventListener(
+    "click",
+    async function() {
+
+      await supabaseClient.auth.signOut();
+
+      dashboard.style.display =
+        "none";
+
+      loginSection.style.display =
+        "flex";
+
+      loginForm.reset();
+
+      message.className =
+        "message";
+
+      message.textContent = "";
+
+    }
+  );
+
+
+  supabaseClient.auth.onAuthStateChange(
+    async function(event, session) {
+
+      if (
+        event === "SIGNED_IN" &&
+        session
+      ) {
+
+        await loadDashboard(
+          session.user
+        );
+
+      }
+
+
+      if (event === "SIGNED_OUT") {
+
+        dashboard.style.display =
+          "none";
+
+        loginSection.style.display =
+          "flex";
+
+      }
+
+    }
+  );
+
+
+  checkSession();
+
+</script>
+
+</body>
+</html>
